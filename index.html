@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CBSE Class 9 Science MCQ</title>
+    <link rel="stylesheet" href="style.css">
+    <script src="https://accounts.google.com/gsi/client" async defer></script>
+</head>
+<body>
+    <div class="container">
+        <!-- Login Screen -->
+        <div id="login-screen" class="screen active">
+            <div class="login-card">
+                <div class="login-icon">🔬</div>
+                <h1>CBSE Class 9 Science MCQ</h1>
+                <p class="login-subtitle">Sign in to track your progress</p>
+                <div id="g_id_onload"
+                     data-client_id="YOUR_GOOGLE_CLIENT_ID.apps.googleusercontent.com"
+                     data-callback="handleGoogleLogin"
+                     data-auto_prompt="false">
+                </div>
+                <div class="g_id_signin"
+                     data-type="standard"
+                     data-size="large"
+                     data-theme="filled_blue"
+                     data-text="sign_in_with"
+                     data-shape="rectangular"
+                     data-logo_alignment="left"
+                     data-width="300">
+                </div>
+                <button class="btn btn-guest" onclick="guestLogin()">Continue as Guest</button>
+            </div>
+        </div>
+
+        <!-- Home Screen -->
+        <div id="home-screen" class="screen">
+            <div class="user-bar">
+                <div class="user-info">
+                    <img id="user-avatar" class="user-avatar" src="" alt="">
+                    <span id="user-name" class="user-name"></span>
+                </div>
+                <button class="btn-logout" onclick="logout()">Logout</button>
+            </div>
+            <div class="hero">
+                <h1>🔬 CBSE Class 9 Science MCQ</h1>
+                <p class="subtitle">Test your knowledge in Physics, Chemistry &amp; Biology</p>
+            </div>
+            <div class="subject-cards">
+                <div class="card physics" onclick="startQuiz('physics')">
+                    <div class="card-icon">⚡</div>
+                    <h2>Physics</h2>
+                    <p>Motion, Force, Gravitation, Work &amp; Energy, Sound</p>
+                    <span class="question-count" id="physics-count"></span>
+                    <button class="btn">Start Quiz</button>
+                </div>
+                <div class="card chemistry" onclick="startQuiz('chemistry')">
+                    <div class="card-icon">🧪</div>
+                    <h2>Chemistry</h2>
+                    <p>Matter, Atoms, Structure of Atom, Elements</p>
+                    <span class="question-count" id="chemistry-count"></span>
+                    <button class="btn">Start Quiz</button>
+                </div>
+                <div class="card biology" onclick="startQuiz('biology')">
+                    <div class="card-icon">🧬</div>
+                    <h2>Biology</h2>
+                    <p>Cell, Tissues, Diversity, Diseases, Natural Resources</p>
+                    <span class="question-count" id="biology-count"></span>
+                    <button class="btn">Start Quiz</button>
+                </div>
+            </div>
+            <div class="mixed-quiz">
+                <button class="btn btn-mixed" onclick="startQuiz('mixed')">🎯 Mixed Quiz (All Subjects)</button>
+            </div>
+        </div>
+
+        <!-- Quiz Screen -->
+        <div id="quiz-screen" class="screen">
+            <div class="quiz-header">
+                <button class="btn-back" onclick="goHome()">← Back</button>
+                <div class="quiz-info">
+                    <span id="subject-label" class="subject-badge"></span>
+                    <span id="chapter-label" class="chapter-badge"></span>
+                </div>
+                <div class="progress-info">
+                    <span id="question-number">1</span> / <span id="total-questions">10</span>
+                </div>
+            </div>
+            <div class="progress-bar">
+                <div id="progress-fill" class="progress-fill"></div>
+            </div>
+            <div class="timer-bar">
+                <div class="q-timer">
+                    <div id="q-timer-ring" class="q-timer-ring">
+                        <svg width="38" height="38"><circle class="bg" cx="19" cy="19" r="16"/><circle id="q-timer-fg" class="fg" cx="19" cy="19" r="16" stroke-dasharray="100.53" stroke-dashoffset="0"/></svg>
+                    </div>
+                    <span id="q-timer-sec" class="q-timer-sec">30</span>
+                </div>
+                <span>⏱️ <span id="timer">00:00</span></span>
+                <span>Score: <span id="current-score">0</span></span>
+            </div>
+            <div id="question-container" class="question-container">
+                <h2 id="question-text" class="question-text"></h2>
+                <div id="options-container" class="options-container"></div>
+            </div>
+            <div class="quiz-footer">
+                <div id="explanation" class="explanation hidden"></div>
+                <button id="next-btn" class="btn btn-next hidden" onclick="nextQuestion()">Next Question →</button>
+            </div>
+        </div>
+
+        <!-- Result Screen -->
+        <div id="result-screen" class="screen">
+            <div class="result-card">
+                <div id="result-emoji" class="result-emoji"></div>
+                <h1 id="result-title"></h1>
+                <div class="score-circle">
+                    <span id="final-score" class="score-number"></span>
+                    <span class="score-label">out of <span id="final-total"></span></span>
+                </div>
+                <div class="result-stats">
+                    <div class="stat correct"><span id="stat-correct">0</span><label>Correct</label></div>
+                    <div class="stat wrong"><span id="stat-wrong">0</span><label>Wrong</label></div>
+                    <div class="stat skipped"><span id="stat-skipped">0</span><label>Skipped</label></div>
+                    <div class="stat time"><span id="stat-time">0</span><label>Time</label></div>
+                </div>
+                <div class="result-actions">
+                    <button class="btn" onclick="reviewAnswers()">📋 Review Answers</button>
+                    <button class="btn btn-retry" onclick="retryQuiz()">🔄 Retry</button>
+                    <button class="btn btn-home" onclick="goHome()">🏠 Home</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Review Screen -->
+        <div id="review-screen" class="screen">
+            <div class="review-header">
+                <button class="btn-back" onclick="showResult()">← Back to Results</button>
+                <h2>📋 Answer Review</h2>
+            </div>
+            <div id="review-container" class="review-container"></div>
+            <div class="review-footer">
+                <button class="btn btn-home" onclick="goHome()">🏠 Home</button>
+            </div>
+        </div>
+    </div>
+    <script src="questions.js"></script>
+    <script src="app.js"></script>
+</body>
+</html>
